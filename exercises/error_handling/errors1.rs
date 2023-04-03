@@ -5,14 +5,30 @@
 // construct to `Option` that can be used to express error conditions. Let's use it!
 // Execute `rustlings hint errors1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+// this was done for no reason
+#[derive(Debug, PartialEq)]
+pub struct EmptyNameError;
 
-pub fn generate_nametag_text(name: String) -> Option<String> {
+impl std::error::Error for EmptyNameError {}
+
+impl std::fmt::Display for EmptyNameError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "`name` was empty; it must be nonempty")
+    }
+}
+
+impl From<&str> for EmptyNameError {
+    fn from(_: &str) -> Self {
+        EmptyNameError
+    }
+}
+
+pub fn generate_nametag_text(name: String) -> Result<String, String> {
     if name.is_empty() {
         // Empty names aren't allowed.
-        None
+        Err("`name` was empty; it must be nonempty.".into())
     } else {
-        Some(format!("Hi! My name is {}", name))
+        Ok(format!("Hi! My name is {}", name))
     }
 }
 
